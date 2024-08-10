@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "python-web-hw11"
+version = "0.1.0"
+description = ""
+authors = ["Andriy <AndriySydor91@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = {extras = ["email"], version = "^2.8.2"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
