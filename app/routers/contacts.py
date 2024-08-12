@@ -5,6 +5,7 @@ from typing import List, Optional
 from datetime import date, timedelta
 
 from app import models, schemas, database
+from app.auth import get_current_user
 
 router = APIRouter()
 
@@ -14,9 +15,10 @@ def search_contacts(
     first_name: Optional[str] = None,
     last_name: Optional[str] = None,
     email: Optional[str] = None,
-    db: Session = Depends(database.get_db)
+    db: Session = Depends(database.get_db),
+    current_user: schemas.User = Depends(get_current_user)  # Перевірка токена
 ):
-    query = db.query(models.Contact)
+    query = db.query(models.Contact).filter(models.Contact.owner_id == current_user.id)
     
     if first_name:
         query = query.filter(models.Contact.first_name.ilike(f"%{first_name}%"))
@@ -34,7 +36,10 @@ def search_contacts(
 
 # Отримання контактів з днями народження на найближчі 7 днів
 @router.get("/upcoming_birthdays/", response_model=List[schemas.Contact])
-def get_upcoming_birthdays(db: Session = Depends(database.get_db)):
+def get_upcoming_birthdays(
+    db: Session = Depends(database.get_db),
+    current_user: schemas.User = Depends(get_current_user)  # Перевірка токена
+):
     today = date.today()
     current_year = today.year
 
@@ -43,6 +48,7 @@ def get_upcoming_birthdays(db: Session = Depends(database.get_db)):
     for i in range(7):
         day_to_check = today + timedelta(days=i)
         contacts = db.query(models.Contact).filter(
+            models.Contact.owner_id == current_user.id,
             extract('month', models.Contact.birthday) == day_to_check.month,
             extract('day', models.Contact.birthday) == day_to_check.day
         ).all()
