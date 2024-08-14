@@ -4,8 +4,11 @@ from datetime import date
 # User models
 class UserBase(BaseModel):
     email: EmailStr
+<<<<<<< HEAD
     is_verified: bool = False  # Поле для перевірки верифікації
     avatar_url: str | None = None  # Додано поле для URL аватара
+=======
+>>>>>>> e93666bb292b4c19cc9d9aea1ffcfca1cd64a375
 
 class UserCreate(UserBase):
     password: str
@@ -14,11 +17,15 @@ class User(UserBase):
     id: int
 
     class Config:
+<<<<<<< HEAD
         from_attributes = True  # Підтримка режиму ORM
 
 # Схема для оновлення аватара
 class AvatarUpdate(BaseModel):
     avatar_url: str
+=======
+        from_attributes = True  # Підтримка режиму ORM (враховуючи зміни у Pydantic V2)
+>>>>>>> e93666bb292b4c19cc9d9aea1ffcfca1cd64a375
 
 # Contact models
 class ContactBase(BaseModel):
@@ -46,6 +53,7 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: str | None = None
+<<<<<<< HEAD
 
 # Email verification models
 class EmailVerification(BaseModel):
@@ -54,4 +62,6 @@ class EmailVerification(BaseModel):
 class EmailVerificationToken(BaseModel):
     token: str
     
+=======
+>>>>>>> e93666bb292b4c19cc9d9aea1ffcfca1cd64a375
         

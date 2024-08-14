@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr
 from datetime import date, timedelta
@@ -143,3 +143,4 @@ def upcoming_birthdays(
         models.Contact.owner_id == current_user.id,
         models.Contact.birthday.between(today, next_week)
     ).all()
+    

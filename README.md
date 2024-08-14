@@ -26,6 +26,7 @@ This project is a REST API for managing contacts, built using FastAPI and SQLAlc
 ### Setting Up the Environment
 
 1. **Clone the repository**: https://github.com/AndriySydor1/homework-11
+   <<<<<<< HEAD
 2. **Set up Docker containers**:
    Use Docker Compose to set up all the necessary services (PostgreSQL, Redis, SMTP server):
    docker-compose up -d
@@ -61,9 +62,20 @@ This project is a REST API for managing contacts, built using FastAPI and SQLAlc
    Apply the migrations to set up the database schema:
    alembic upgrade head
 
-7. **Start the FastAPI server**:
-   uvicorn app.main:app --reload
-   The API will be available at http://127.0.0.1:8000.
+7. # **Start the FastAPI server**:
+8. **Set up PostgreSQL**:
+   ```bash
+   docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres
+   ```
+9. **Configure the database**:
+   Update the alembic.ini file with your database URL:
+   sqlalchemy.url = postgresql://postgres:postgres@localhost/contacts_db
+10. **Run database migrations**:
+    alembic upgrade head
+11. **Start the FastAPI server**:
+    > > > > > > > e93666bb292b4c19cc9d9aea1ffcfca1cd64a375
+    > > > > > > > uvicorn app.main:app --reload
+    > > > > > > > The API will be available at http://127.0.0.1:8000.
 
 ## Usage
 
@@ -103,6 +115,7 @@ All the following operations require an Authorization header with a Bearer token
 4. **Getting Upcoming Birthdays**:
    Send a GET request to /contacts/upcoming_birthdays/:
    curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" -X GET http://127.0.0.1:8000/contacts/upcoming_birthdays/
+   <<<<<<< HEAD
 
 ### Password Reset
 
@@ -117,6 +130,8 @@ All the following operations require an Authorization header with a Bearer token
    "token": "reset_token_received_via_email",
    "new_password": "new_secure_password"
    }
+   =======
+   > > > > > > > e93666bb292b4c19cc9d9aea1ffcfca1cd64a375
 
 ## License
 

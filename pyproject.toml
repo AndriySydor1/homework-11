@@ -12,8 +12,11 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 python-multipart = "^0.0.9"
 python-dotenv = "^1.0.1"
+<<<<<<< HEAD
 fastapi-limiter = "^0.1.6"
 aioredis = "^2.0.1"
+=======
+>>>>>>> e93666bb292b4c19cc9d9aea1ffcfca1cd64a375
 
 
 [build-system]
