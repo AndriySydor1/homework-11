@@ -1,6 +1,12 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey
+from sqlalchemy import Boolean, Column, Integer, String, Date, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, Boolean, DateTime
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
+import datetime
 
 Base = declarative_base()
 
@@ -10,6 +16,10 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(255), unique=True, index=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
+    is_verified = Column(Boolean, default=False)
+    avatar_url = Column(String(255), nullable=True)
+    reset_password_token = Column(String(255), index=True, nullable=True)
+    reset_password_expires = Column(DateTime, nullable=True)
     contacts = relationship("Contact", back_populates="owner")
 
 class Contact(Base):

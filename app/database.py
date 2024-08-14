@@ -9,6 +9,9 @@ load_dotenv()
 # URL підключення до бази даних PostgreSQL, взятий зі змінної середовища
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL не завантажений або неправильний")
+
 # Створення об'єкта двигуна (engine)
 engine = create_engine(DATABASE_URL)
 
