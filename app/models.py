@@ -11,8 +11,11 @@ import datetime
 Base = declarative_base()
 
 class User(Base):
+    """User 
+    Args:
+        Base ([type]): [description]
+    """    
     __tablename__ = "users"
-
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(255), unique=True, index=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
@@ -23,6 +26,10 @@ class User(Base):
     contacts = relationship("Contact", back_populates="owner")
 
 class Contact(Base):
+    """Contact 
+    Args:
+        Base ([type]): [description]
+    """    
     __tablename__ = "contacts"
 
     id = Column(Integer, primary_key=True, index=True)

@@ -18,6 +18,21 @@ def search_contacts(
     db: Session = Depends(database.get_db),
     current_user: schemas.User = Depends(get_current_user)  # Перевірка токена
 ):
+    """search_contacts 
+
+    Args:
+        first_name (Optional[str], optional): [description]. Defaults to None.
+        last_name (Optional[str], optional): [description]. Defaults to None.
+        email (Optional[str], optional): [description]. Defaults to None.
+        db (Session, optional): [description]. Defaults to Depends(database.get_db).
+        current_user (schemas.User, optional): [description]. Defaults to Depends(get_current_user)#Перевіркатокена.
+
+    Raises:
+        HTTPException: [description]
+
+    Returns:
+        [type]: [description]
+    """    
     query = db.query(models.Contact).filter(models.Contact.owner_id == current_user.id)
     
     if first_name:
@@ -40,6 +55,17 @@ def get_upcoming_birthdays(
     db: Session = Depends(database.get_db),
     current_user: schemas.User = Depends(get_current_user)  # Перевірка токена
 ):
+    """get_upcoming_birthdays 
+        Args:
+        db (Session, optional): [description]. Defaults to Depends(database.get_db).
+        current_user (schemas.User, optional): [description]. Defaults to Depends(get_current_user)#Перевіркатокена.
+
+    Raises:
+        HTTPException: [description]
+
+    Returns:
+        [type]: [description]
+    """    
     today = date.today()
     current_year = today.year
 

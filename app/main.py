@@ -16,6 +16,14 @@ from contextlib import asynccontextmanager
 # Створення об'єкта FastAPI
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """lifespan AI is creating summary for lifespan
+
+    Args:
+        app (FastAPI): [description]
+
+    Yields:
+        [type]: [description]
+    """    
     # Підключення до Redis для обмеження швидкості запитів
     redis = Redis.from_url(os.getenv("REDIS_URL", "redis://localhost:6379"))
     await FastAPILimiter.init(redis)
@@ -46,6 +54,11 @@ app.include_router(reset_password.router, prefix="/auth", tags=["auth"])
 models.Base.metadata.create_all(bind=database.engine)
 
 class ContactCreate(BaseModel):
+    """ContactCreate AI is creating summary for ContactCreate
+
+    Args:
+        BaseModel ([type]): [description]
+    """    
     first_name: str
     last_name: str
     email: EmailStr
@@ -54,6 +67,11 @@ class ContactCreate(BaseModel):
     additional_info: str = None
 
 class ContactUpdate(ContactCreate):
+    """ContactUpdate AI is creating summary for ContactUpdate
+
+    Args:
+        ContactCreate ([type]): [description]
+    """    
     pass
 
 # CRUD Operations
@@ -63,6 +81,16 @@ def create_contact(
     db: Session = Depends(database.get_db),
     current_user: models.User = Depends(get_current_user)
 ):
+    """create_contact AI is creating summary for create_contact
+
+    Args:
+        contact (ContactCreate): [description]
+        db (Session, optional): [description]. Defaults to Depends(database.get_db).
+        current_user (models.User, optional): [description]. Defaults to Depends(get_current_user).
+
+    Returns:
+        [type]: [description]
+    """    
     db_contact = models.Contact(**contact.model_dump(), owner_id=current_user.id)
     db.add(db_contact)
     db.commit()
@@ -74,6 +102,15 @@ def get_contacts(
     db: Session = Depends(database.get_db),
     current_user: models.User = Depends(get_current_user)
 ):
+    """get_contacts AI is creating summary for get_contacts
+
+    Args:
+        db (Session, optional): [description]. Defaults to Depends(database.get_db).
+        current_user (models.User, optional): [description]. Defaults to Depends(get_current_user).
+
+    Returns:
+        [type]: [description]
+    """    
     return db.query(models.Contact).filter(models.Contact.owner_id == current_user.id).all()
 
 @app.get("/contacts/{contact_id}")
@@ -82,6 +119,19 @@ def get_contact(
     db: Session = Depends(database.get_db),
     current_user: models.User = Depends(get_current_user)
 ):
+    """get_contact AI is creating summary for get_contact
+
+    Args:
+        contact_id (int): [description]
+        db (Session, optional): [description]. Defaults to Depends(database.get_db).
+        current_user (models.User, optional): [description]. Defaults to Depends(get_current_user).
+
+    Raises:
+        HTTPException: [description]
+
+    Returns:
+        [type]: [description]
+    """    
     contact = db.query(models.Contact).filter(models.Contact.id == contact_id, models.Contact.owner_id == current_user.id).first()
     if not contact:
         raise HTTPException(status_code=404, detail="Contact not found")
@@ -94,6 +144,20 @@ def update_contact(
     db: Session = Depends(database.get_db),
     current_user: models.User = Depends(get_current_user)
 ):
+    """update_contact AI is creating summary for update_contact
+
+    Args:
+        contact_id (int): [description]
+        contact (ContactUpdate): [description]
+        db (Session, optional): [description]. Defaults to Depends(database.get_db).
+        current_user (models.User, optional): [description]. Defaults to Depends(get_current_user).
+
+    Raises:
+        HTTPException: [description]
+
+    Returns:
+        [type]: [description]
+    """    
     db_contact = db.query(models.Contact).filter(models.Contact.id == contact_id, models.Contact.owner_id == current_user.id).first()
     if not db_contact:
         raise HTTPException(status_code=404, detail="Contact not found")
@@ -109,6 +173,19 @@ def delete_contact(
     db: Session = Depends(database.get_db),
     current_user: models.User = Depends(get_current_user)
 ):
+    """delete_contact AI is creating summary for delete_contact
+
+    Args:
+        contact_id (int): [description]
+        db (Session, optional): [description]. Defaults to Depends(database.get_db).
+        current_user (models.User, optional): [description]. Defaults to Depends(get_current_user).
+
+    Raises:
+        HTTPException: [description]
+
+    Returns:
+        [type]: [description]
+    """    
     db_contact = db.query(models.Contact).filter(models.Contact.id == contact_id, models.Contact.owner_id == current_user.id).first()
     if not db_contact:
         raise HTTPException(status_code=404, detail="Contact not found")
@@ -123,6 +200,16 @@ def search_contacts(
     db: Session = Depends(database.get_db),
     current_user: models.User = Depends(get_current_user)
 ):
+    """search_contacts AI is creating summary for search_contacts
+
+    Args:
+        query (str): [description]
+        db (Session, optional): [description]. Defaults to Depends(database.get_db).
+        current_user (models.User, optional): [description]. Defaults to Depends(get_current_user).
+
+    Returns:
+        [type]: [description]
+    """    
     return db.query(models.Contact).filter(
         (models.Contact.owner_id == current_user.id) &
         (
@@ -137,6 +224,15 @@ def upcoming_birthdays(
     db: Session = Depends(database.get_db),
     current_user: models.User = Depends(get_current_user)
 ):
+    """upcoming_birthdays AI is creating summary for upcoming_birthdays
+
+    Args:
+        db (Session, optional): [description]. Defaults to Depends(database.get_db).
+        current_user (models.User, optional): [description]. Defaults to Depends(get_current_user).
+
+    Returns:
+        [type]: [description]
+    """    
     today = date.today()
     next_week = today + timedelta(days=7)
     return db.query(models.Contact).filter(

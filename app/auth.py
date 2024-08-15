@@ -14,9 +14,26 @@ from aioredis import Redis
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """verify_password AI is creating summary for verify_password
+
+    Args:
+        plain_password (str): [description]
+        hashed_password (str): [description]
+
+    Returns:
+        bool: [description]
+    """    
     return pwd_context.verify(plain_password, hashed_password)
 
 def get_password_hash(password: str) -> str:
+    """get_password_hash AI is creating summary for get_password_hash
+
+    Args:
+        password (str): [description]
+
+    Returns:
+        str: [description]
+    """    
     return pwd_context.hash(password)
 
 # Налаштування JWT
@@ -24,12 +41,21 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/token/")  # Оновлений шлях до отримання токену
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/token/")
 
 # Підключення до Redis
 redis = Redis.from_url(os.getenv("REDIS_URL", "redis://localhost:6379"))
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+    """create_access_token AI is creating summary for create_access_token
+
+    Args:
+        data (dict): [description]
+        expires_delta (Optional[timedelta], optional): [description]. Defaults to None.
+
+    Returns:
+        str: [description]
+    """    
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + (expires_delta if expires_delta else timedelta(minutes=15))
     to_encode.update({"exp": expire})
@@ -37,6 +63,19 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     return encoded_jwt
 
 def verify_token(token: str, credentials_exception: HTTPException) -> schemas.TokenData:
+    """verify_token AI is creating summary for verify_token
+
+    Args:
+        token (str): [description]
+        credentials_exception (HTTPException): [description]
+
+    Raises:
+        credentials_exception: [description]
+        credentials_exception: [description]
+
+    Returns:
+        schemas.TokenData: [description]
+    """    
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
@@ -48,6 +87,19 @@ def verify_token(token: str, credentials_exception: HTTPException) -> schemas.To
     return token_data
 
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(database.get_db)) -> models.User:
+    """get_current_user AI is creating summary for get_current_user
+
+    Args:
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        db (Session, optional): [description]. Defaults to Depends(database.get_db).
+
+    Raises:
+        credentials_exception: [description]
+        HTTPException: [description]
+
+    Returns:
+        models.User: [description]
+    """    
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -76,12 +128,48 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     return user
 
 def create_verification_token(email: str) -> str:
+    """create_verification_token AI is creating summary for create_verification_token
+
+    Args:
+        email (str): [description]
+
+    Returns:
+        str: [description]
+    """    
     expire = datetime.now(timezone.utc) + timedelta(hours=24)  # Термін дії токена 24 години
     to_encode = {"sub": email, "exp": expire}
     verification_token = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return verification_token
 
+def verify_verification_token(token: str) -> Optional[str]:
+    """verify_verification_token AI is creating summary for verify_verification_token
+
+    Args:
+        token (str): [description]
+
+    Returns:
+        Optional[str]: [description]
+    """    
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            return None
+        return email
+    except JWTError:
+        return None
+
 async def authenticate_user(db: Session, email: str, password: str) -> Optional[models.User]:
+    """authenticate_user AI is creating summary for authenticate_user
+
+    Args:
+        db (Session): [description]
+        email (str): [description]
+        password (str): [description]
+
+    Returns:
+        Optional[models.User]: [description]
+    """    
     # Перевірка, чи користувач є в кеші
     cached_user = await redis.get(f"user:{email}")
     if cached_user:

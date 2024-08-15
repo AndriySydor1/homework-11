@@ -8,6 +8,19 @@ router = APIRouter()
 
 @router.post("/reset-password/request/", response_model=dict)
 def request_password_reset(email: str, background_tasks: BackgroundTasks, db: Session = Depends(database.get_db)):
+    """request_password_reset 
+
+    Args:
+        email (str): [description]
+        background_tasks (BackgroundTasks): [description]
+        db (Session, optional): [description]. Defaults to Depends(database.get_db).
+
+    Raises:
+        HTTPException: [description]
+
+    Returns:
+        [type]: [description]
+    """    
     user = db.query(models.User).filter(models.User.email == email).first()
     if not user:
         raise HTTPException(status_code=404, detail="User with this email does not exist.")
@@ -25,6 +38,17 @@ def request_password_reset(email: str, background_tasks: BackgroundTasks, db: Se
 
 @router.post("/reset-password/verify/", response_model=dict)
 def verify_reset_token(token: str, db: Session = Depends(database.get_db)):
+    """verify_reset_token 
+    Args:
+        token (str): [description]
+        db (Session, optional): [description]. Defaults to Depends(database.get_db).
+
+    Raises:
+        HTTPException: [description]
+
+    Returns:
+        [type]: [description]
+    """    
     user = db.query(models.User).filter(models.User.reset_password_token == token).first()
     if not user or user.reset_password_expires < datetime.now(timezone.utc):
         raise HTTPException(status_code=400, detail="Invalid or expired reset token.")
@@ -33,6 +57,18 @@ def verify_reset_token(token: str, db: Session = Depends(database.get_db)):
 
 @router.post("/reset-password/", response_model=dict)
 def reset_password(token: str, new_password: str, db: Session = Depends(database.get_db)):
+    """reset_password 
+    Args:
+        token (str): [description]
+        new_password (str): [description]
+        db (Session, optional): [description]. Defaults to Depends(database.get_db).
+
+    Raises:
+        HTTPException: [description]
+
+    Returns:
+        [type]: [description]
+    """    
     user = db.query(models.User).filter(models.User.reset_password_token == token).first()
     if not user or user.reset_password_expires < datetime.now(timezone.utc):
         raise HTTPException(status_code=400, detail="Invalid or expired reset token.")

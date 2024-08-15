@@ -16,13 +16,21 @@ conf = ConnectionConfig(
     MAIL_PORT=int(os.getenv("MAIL_PORT")),
     MAIL_SERVER=os.getenv("MAIL_SERVER"),
     MAIL_FROM_NAME=os.getenv("MAIL_FROM_NAME"),
-    MAIL_TLS=True,
-    MAIL_SSL=False,
+    MAIL_STARTTLS=True,  # Використовуємо MAIL_STARTTLS замість MAIL_TLS
+    MAIL_SSL_TLS=False,  # Використовуємо MAIL_SSL_TLS замість MAIL_SSL
     USE_CREDENTIALS=True
 )
 
 # Функція для відправлення листа з підтвердженням
 async def send_verification_email(email: EmailStr, token: str, background_tasks: BackgroundTasks):
+    """
+    Відправляє лист для підтвердження електронної пошти.
+
+    Args:
+        email (EmailStr): Електронна пошта одержувача.
+        token (str): Токен для підтвердження електронної пошти.
+        background_tasks (BackgroundTasks): Завдання для виконання у фоновому режимі.
+    """
     message = MessageSchema(
         subject="Email Verification",
         recipients=[email],  # Список одержувачів
@@ -34,6 +42,14 @@ async def send_verification_email(email: EmailStr, token: str, background_tasks:
 
 # Функція для відправлення повідомлення
 async def send_email(subject: str, email_to: List[EmailStr], body: str):
+    """
+    Відправляє електронного листа.
+
+    Args:
+        subject (str): Тема листа.
+        email_to (List[EmailStr]): Список одержувачів.
+        body (str): Текст листа.
+    """
     message = MessageSchema(
         subject=subject,
         recipients=email_to,
@@ -45,6 +61,14 @@ async def send_email(subject: str, email_to: List[EmailStr], body: str):
 
 # Функція для відправлення листа з скиданням паролю
 async def send_reset_password_email(email: EmailStr, token: str, background_tasks: BackgroundTasks):
+    """
+    Відправляє лист для скидання паролю.
+
+    Args:
+        email (EmailStr): Електронна пошта одержувача.
+        token (str): Токен для скидання паролю.
+        background_tasks (BackgroundTasks): Завдання для виконання у фоновому режимі.
+    """
     reset_link = f"http://127.0.0.1:8000/reset-password?token={token}"
     message = MessageSchema(
         subject="Password Reset Request",
